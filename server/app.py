@@ -6,17 +6,23 @@ from flask import Flask, make_response, request
 from flask import request
 from flask_restful import Resource
 from flask_migrate import Migrate
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI']
-db.init_app(app) 
-api = Api(app)
-# Local imports
 from config import app, db, api
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] 
+
+
+# Local imports
+
+
 # Add your model imports
 from models import CoffeeShop, Reviews, Customers, Coupons
 
 # Views go here!
-class Reviews:
+class AllReviews(Resource):
+    def get(self):
+        reviews = Reviews.query.all()
+        response_body = [review.to_dict(only=('id', 'stars', 'review', 'customer.name','coffee_shop.name', 'coffee_shop.image')) for review in reviews]
+        return make_response(response_body, 200)
     def post(self):
         review_data = request.json.get('review')
         stars_data = request.json.get('stars')
@@ -31,10 +37,12 @@ class Reviews:
                 "error": "please enter a valid review!"
              }
             return make_response(response_body, 422)
-    api.add_resource()
+api.add_resource(AllReviews, '/reviews')
 
-    def patch(self):
-        review= db.session.get(Reviews)
+
+class ReviewByID(Resource):
+    def patch(self,id):
+        review= db.session.get(Reviews,id)
         if review:
                 for attr in request.json:
                     setattr(review, attr, request.json.get(attr))
@@ -46,10 +54,9 @@ class Reviews:
                     "error": "Please write a valid review!"
                 }
                 return make_response(response_body, 422)
-    api.add_resource()
-        
-    def delete(self):
-        review= db.session.get(Reviews)
+
+    def delete(self,id):
+        review= db.session.get(Reviews,id)
         if review:
             db.session.delete(review)
             db.session.commit()
@@ -60,14 +67,45 @@ class Reviews:
                 "error": "Unable to delete review"
             }
             return make_response(response_body, 404)
-    api.add_resource()
+api.add_resource(ReviewByID, '/reviews/<int:id>')
 
-class Coupons:
+class AllCoupons(Resource):
      def get(self):
         coupons = Coupons.query.all()
-        response_body = [coupon.to_dict(only=('id', 'coupon_comment')) for coupon in coupons]
+        response_body = [coupon.to_dict(only=('id', 'coupon_comment','coffee_shop.name')) for coupon in coupons]
         return make_response(response_body, 200)
-     api.add_resource()
+api.add_resource(AllCoupons, '/coupons')
+
+class AllCustomers(Resource):
+    def get(self):
+        customers = Customers.query.all()
+        response_body = [customer.to_dict(only=('id', 'name')) for customer in customers]
+        return make_response(response_body, 200)
+api.add_resource(AllCustomers, '/customers')
+
+class AllCoffeeShops(Resource):
+     def get(self):
+        coffeeshops = CoffeeShop.query.all()
+        response_body = [coffeeshop.to_dict(only=('id', 'image', 'name')) for coffeeshop in coffeeshops]
+        return make_response(response_body, 200)
+     
+     def post(self):
+        name_data = request.json.get('name')
+        image_data = request.json.get('image')
+        try:
+            new_coffee_shop = CoffeeShop(image=image_data, name=name_data)
+            db.session.add(new_coffee_shop)
+            db.session.commit()
+            response_body = new_coffee_shop.to_dict(only=('id', 'image', 'name'))
+            return make_response(response_body, 201)
+        except:
+            response_body = {
+                "error": "please enter a valid coffee shop!"
+             }
+            return make_response(response_body, 422)
+api.add_resource(AllCoffeeShops, '/coffeeshops')
+
+
 
 
 @app.route('/')

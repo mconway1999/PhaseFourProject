@@ -10,7 +10,7 @@ class CoffeeShop(db.Model, SerializerMixin):
      image = db.Column(db.String, nullable=False)
      name = db.Column(db.String, nullable=False)
 
-     coupons = db.relationship('Coupons', backpopulates = 'coffee_shop')
+     coupons = db.relationship('Coupons', back_populates = 'coffee_shop')
      reviews = db.relationship('Reviews', back_populates = 'coffee_shop')
 
      @validates('name')
@@ -24,9 +24,9 @@ class Coupons(db.Model, SerializerMixin):
      __tablename__ ='coupons'
      id = db.Column(db.Integer, primary_key=True)
      coupon_comment = db.Column(db.String, nullable=False)
-     coffee_shop_id=db.Column(db.Integer, nullable=False)
+     coffee_shop_id=db.Column(db.Integer,db.ForeignKey('coffee_shops.id'), nullable=False)
     
-     coffee_shop = db.relationship('CoffeeShop', backpopulates='coupons')
+     coffee_shop = db.relationship('CoffeeShop', back_populates='coupons')
 
      @validates('coupon_comment')
      def validate_review(self, column, value):
@@ -55,10 +55,10 @@ class Reviews(db.Model, SerializerMixin):
      review = db.Column(db.String, nullable=False)
      stars = db.Column(db.Integer, nullable=False)
 
-     customer_id=db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
-     coffee_shop_id=db.Column(db.Integer, db.ForeignKey('coffee_shops.id'), nullable=False)
+     customer_id=db.Column(db.Integer, db.ForeignKey('customers.id'))
+     coffee_shop_id=db.Column(db.Integer, db.ForeignKey('coffee_shops.id'))
 
-     customer = db.relationship('Customer', back_populates="reviews")
+     customer = db.relationship('Customers', back_populates="reviews")
      coffee_shop = db.relationship('CoffeeShop', back_populates="reviews")
 
 
@@ -74,3 +74,5 @@ class Reviews(db.Model, SerializerMixin):
         if type(value) == int and 1 <= value <= 5:
             return value
         raise Exception(f"{column} must be an integer between 1 and 5")
+     
+
