@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 function Coupons({coupon}) {
-    console.log(coupon)
     return(
     <li>
         <h1>View Coupons Here!</h1>

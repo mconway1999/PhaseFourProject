@@ -101,7 +101,7 @@ class AllCustomers(Resource):
         response_body = [customer.to_dict(only=('id', 'name')) for customer in customers]
         return make_response(response_body, 200)
     
-
+    ipdb.set_trace()
     def post(self):
         name_data = request.json.get('name')
         try:
@@ -138,9 +138,6 @@ class AllCoffeeShops(Resource):
              }
             return make_response(response_body, 422)
 api.add_resource(AllCoffeeShops, '/coffeeshops')
-
-
-
 
 @app.route('/')
 def index():
