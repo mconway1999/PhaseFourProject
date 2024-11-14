@@ -16,10 +16,6 @@ function AddReview() {
     })
 
 
-    // function handleUpdateStars(event){
-    //         event.preventDefault()
-    //         addReview({...formData, stars: Number(formData.stars)})
-    // }
 
     function updateFormData(event){
         setFormData({...formData, [event.target.name]: event.target.value})

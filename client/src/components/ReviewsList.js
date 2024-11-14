@@ -4,7 +4,6 @@ import { useOutletContext } from "react-router-dom";
 
 function ReviewsList() {
         const {reviews} = useOutletContext();
-        console.log(reviews)
     
         const reviewComponents = reviews.map(review => {
             return(<Review key = {review.id} review={review}/>)

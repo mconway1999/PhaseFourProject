@@ -103,12 +103,12 @@ function App() {
       .then(response => {
         if(response.ok){
           response.json().then(updatedReview => {
-            const updatedReviewArray = reviews.map(reviews => {
-              if(reviews){
+            const updatedReviewArray = reviews.map(review => {
+              if(review.id === updatedReview.id){
                 return updatedReview
               }
               else{
-                return reviews
+                return review
               }
             })
             setReviews(updatedReviewArray)

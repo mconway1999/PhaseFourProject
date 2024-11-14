@@ -76,3 +76,4 @@ class Reviews(db.Model, SerializerMixin):
         raise Exception(f"{column} must be an integer between 1 and 5")
      
 
+#  route purpose of route and view how view works, app.route --> downsides are make a second argument to collect more methods, what request is made then control flow, CORS vs proxy
