@@ -78,21 +78,21 @@ function App() {
         }
       })
     }
-    function deleteReview(){
-      fetch(`/reviews`, {
+    function deleteReview(id){
+      fetch(`/reviews/${id}`, {
         method: "DELETE"
       })
       .then(response => {
         if(response.ok){
-          const updatedReviewArray = reviews.filter(reviews => {
-            return reviews
+          const updatedReviewArray = reviews.filter(review => {
+            return review.id !== id
           })
           setReviews(updatedReviewArray)
         }
       })
     }
-    function editReview(reviewDataForUpdate){
-      fetch(`/reviews`, {
+    function editReview(id,reviewDataForUpdate){
+      fetch(`/reviews/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

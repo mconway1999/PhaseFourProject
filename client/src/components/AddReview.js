@@ -2,32 +2,37 @@ import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import CoffeeShopList from "./CoffeeShopList";
 
-function AddReview({review}) {
-    const {addReview} = useOutletContext();
+function AddReview() {
+    const {addReview, editReview} = useOutletContext();
 
     const [formData, setFormData] = useState({
         name : "",
         image: "",
         coffeeshop: "",
         review: "",
-        stars: ""
+        stars: "",
+        customer_id:1,
+        coffee_shop_id:1
     })
 
-    const {editReview, deleteReview} = useOutletContext()
 
+    // function handleUpdateStars(event){
+    //         event.preventDefault()
+    //         addReview({...formData, stars: Number(formData.stars)})
+    // }
+
+    function updateFormData(event){
+        setFormData({...formData, [event.target.name]: event.target.value})
+    }
 
 
     function handleSubmit(event){
         event.preventDefault()
-        addReview({...formData, stars: Number(formData.stars)})
+        addReview({...formData, stars : parseInt(formData.stars)})
     }
 
-    function handleDeleteButtonClick(){
-        deleteReview(review.id)
-    }
-    function updateFormData(event){
-        setFormData({...formData, [event.target.name]: event.target.value})
-    }
+ 
+    
 
 
 
@@ -40,8 +45,14 @@ function AddReview({review}) {
     <label htmlFor="image">Image: </label>
     <input onChange={updateFormData} type="text" id="image" name="image" placeholder="New image" value={formData.image} required/>
     <br/><br/>
-    <label htmlFor="stars">Stars: </label>
-    <input onChange={updateFormData} type="number" step="0" id="stars" name="stars" placeholder="New stars" value={formData.stars} required/>
+    <select onChange={updateFormData} name="stars" htmlFor="stars">
+    <option value="">--Stars--</option>
+    <option value="1">one star</option>
+    <option value="2">two stars</option>
+    <option value="3">three stars</option>
+    <option value="4">four stars</option>
+    <option value="5">five stars</option>
+    </select>
     <br/><br/>
     <label htmlFor="review">Review: </label>
     <input onChange={updateFormData} type="text" id="review" name="review" placeholder="New review" value={formData.review} required/>

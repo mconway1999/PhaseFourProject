@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 function CoffeeShops({coffeeshop}) {
-    
+
     console.log(coffeeshop)
     return (
     <li>

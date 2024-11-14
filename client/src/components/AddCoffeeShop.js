@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CoffeeShopList from "./CoffeeShopList";
 import { useOutletContext } from "react-router-dom";
 
-function AddCoffeeShop() {
+function AddCoffeeShop({coffeeshop}) {
     const {addCoffeeShop} = useOutletContext();
 
     const [formData, setFormData] = useState({
@@ -10,16 +10,28 @@ function AddCoffeeShop() {
         image: ""
     })
 
-    function handleSubmit(event){
-        event.preventDefault()
-        addCoffeeShop({...formData, name: Text(formData.name)})
+    // function handleSubmit(event){
+    //     event.preventDefault()
+    //     addCoffeeShop({...formData, name: Text(formData.name)})
+    // }
+function handleSubmit(event){
+    event.preventDefault()
+        
+    const newCoffeeShop = {
+        name: Text(formData.name),
+        image: Text(formData.image),
+       
     }
+
+    addCoffeeShop(newCoffeeShop)
+}
     function updateFormData(event){
         setFormData({...formData, [event.target.name]: event.target.value})
     }
 
    
     return( 
+        
     <form onSubmit={handleSubmit}>
     <h1>Add New Coffee Shop Here!</h1>
     <label htmlFor="name">Name: </label>
@@ -30,7 +42,9 @@ function AddCoffeeShop() {
     <br/><br/>
     <input type="submit" value="Add Coffee Shop"/>
     </form>
-    )}
-  
+    )
+    // <h1>{coffeeshop.name}</h1>
+    // <img>{coffeeshop.img}</img>
+}
 
 export default AddCoffeeShop;
